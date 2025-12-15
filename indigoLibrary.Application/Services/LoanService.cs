@@ -8,8 +8,21 @@ namespace indigoLibrary.Application.Services
 {
     public class LoanService
     {
+
         private readonly ILoanRepository _loanRepository;
         private readonly IBookRepository _bookRepository;
+
+        public LoanService(
+            ILoanRepository loanRepository,
+            IBookRepository bookRepository)
+        {
+            _loanRepository = loanRepository
+                ?? throw new ArgumentNullException(nameof(loanRepository));
+
+            _bookRepository = bookRepository
+                ?? throw new ArgumentNullException(nameof(bookRepository));
+        }
+
         public async Task<CreateLoanResponseDto> CreateLoanAsync(CreateLoanRequestDto request)
         {
             if (request.TypeUser == TypeUserEnum.Guest)
