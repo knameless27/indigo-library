@@ -19,6 +19,7 @@ namespace indigoLibrary.Infrastructure.DependencyInjection
             services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<LoanService>();
+            services.AddScoped<BookService>();
 
 
             return services;

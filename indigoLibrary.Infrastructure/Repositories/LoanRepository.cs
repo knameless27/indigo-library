@@ -30,22 +30,4 @@ namespace indigoLibrary.Infrastructure.Repositories
             p.Status == StatusLoanEnum.Active);
         }
     }
-
-
-    public class BookRepository(IndigoLibraryDbContext context) : IBookRepository
-    {
-        private readonly IndigoLibraryDbContext _context = context;
-
-        public async Task<Book?> GetByIsbnAsync(Guid isbn)
-        {
-            return await _context.Books.FirstOrDefaultAsync(l => l.Isbn == isbn);
-        }
-
-
-        public async Task UpdateAsync(Book book)
-        {
-            _context.Books.Update(book);
-            await _context.SaveChangesAsync();
-        }
-    }
 }
