@@ -24,10 +24,10 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
 
     app.UseCors("DevCors");
 }

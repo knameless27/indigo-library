@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+
+# Logs
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.vs/
+
+# Configuración local sensible
+appsettings.Development.json
+.env
+
+# Rider / VS Code / JetBrains
+.vscode/
+.idea/
+
+# Otros
+*.DS_Store
