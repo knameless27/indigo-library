@@ -19,6 +19,11 @@ namespace indigoLibrary.Application.Services
         {
             if (dto.AvailableAmount < 0)
                 throw new InvalidOperationException("The available amount has to be greater than zero!");
+            
+            var alreadyExist = await _bookRepository.GetByIsbnAsync(dto.Isbn);
+            
+            if(alreadyExist != null)
+                throw new InvalidOperationException("A book with this ISBN already exists!");
 
             var book = new Book(
                 dto.Isbn,
