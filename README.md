@@ -94,7 +94,7 @@ indigoLibrary
 
 ```json
 {
-  "isbn": "978-8432225631",
+  "isbn": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "titulo": "Clean Code",
   "autor": "Robert C. Martin",
   "cantidad": 5
@@ -109,7 +109,7 @@ indigoLibrary
 
 ```json
 {
-  "isbn": "978-8432225631",
+  "isbn": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "identificacionUsuario": "ABC123",
   "tipoUsuario": 1
 }
@@ -128,7 +128,7 @@ Respuesta exitosa:
 ```json
 {
   "id": "guid",
-  "isbn": "978-8432225631",
+  "isbn": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "identificacionUsuario": "ABC123",
   "tipoUsuario": 1,
   "fechaMaximaDevolucion": "2025-01-20"
