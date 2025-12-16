@@ -99,7 +99,7 @@ namespace indigoLibrary.Tests
             var response = await _service.CreateLoanAsync(request);
 
             // Assert
-            Assert.True(response.MaxDateDevolution > DateTime.Now);
+            Assert.True(response.MaxDevolutionDate > DateTime.Now);
         }
 
         [Fact]

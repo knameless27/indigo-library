@@ -6,9 +6,8 @@ using indigoLibrary.Domain.Enums;
 
 namespace indigoLibrary.Application.Services
 {
-    public class LoanService
+    public class LoanService : ILoanService
     {
-
         private readonly ILoanRepository _loanRepository;
         private readonly IBookRepository _bookRepository;
 
@@ -27,67 +26,61 @@ namespace indigoLibrary.Application.Services
         {
             if (request.TypeUser == TypeUserEnum.Guest)
             {
-                var activeLoans = await _loanRepository.CountActiveLoansByUserAsync(request.UserId);
-
+                var activeLoans =
+                    await _loanRepository.CountActiveLoansByUserAsync(request.UserId);
 
                 if (activeLoans >= 1)
-                    throw new InvalidOperationException("The user had already one book in loan!");
+                    throw new InvalidOperationException(
+                        "The user had already one book in loan!");
             }
 
-
             var book = await _bookRepository.GetByIsbnAsync(request.Isbn)
-            ?? throw new InvalidOperationException("The book doesn't exist!");
-
+                ?? throw new InvalidOperationException("The book doesn't exist!");
 
             book.DecreaseStock();
 
-
             var dateLoan = DateTime.Now;
-            var maxDateDevolution = CalculateDateDevolution(
-            dateLoan,
-            request.TypeUser);
+            var MaxDevolutionDate = CalculateDateDevolution(
+                dateLoan,
+                request.TypeUser);
 
+            var loan = new Loan(
+                request.Isbn,
+                request.UserId,
+                request.TypeUser,
+                dateLoan,
+                MaxDevolutionDate);
 
-            var Loan = new Loan(
-            request.Isbn,
-            request.UserId,
-            request.TypeUser,
-            dateLoan,
-            maxDateDevolution);
-
-
-            await _loanRepository.AddAsync(Loan);
+            await _loanRepository.AddAsync(loan);
             await _bookRepository.UpdateAsync(book);
-
 
             return new CreateLoanResponseDto
             {
-                Id = Loan.Id,
-                MaxDateDevolution = maxDateDevolution
+                Id = loan.Id,
+                MaxDevolutionDate = MaxDevolutionDate
             };
         }
-
 
         public async Task<LoanDetailDto> GetLoanAsync(Guid id)
         {
-            var Loan = await _loanRepository.GetByIdAsync(id)
-            ?? throw new KeyNotFoundException("The loan doesn't exist!");
-
+            var loan = await _loanRepository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException("The loan doesn't exist!");
 
             return new LoanDetailDto
             {
-                Id = Loan.Id,
-                Isbn = Loan.Isbn,
-                UserId = Loan.UserId,
-                TypeUser = Loan.TypeUser,
-                MaxDevolutionDate = Loan.MaxDevolutionDate
+                Id = loan.Id,
+                Isbn = loan.Isbn,
+                UserId = loan.UserId,
+                TypeUser = loan.TypeUser,
+                MaxDevolutionDate = loan.MaxDevolutionDate
             };
         }
 
-
-        private static DateTime CalculateDateDevolution(DateTime initDate, TypeUserEnum TypeUser)
+        private static DateTime CalculateDateDevolution(
+            DateTime initDate,
+            TypeUserEnum typeUser)
         {
-            int workDays = TypeUser switch
+            int workDays = typeUser switch
             {
                 TypeUserEnum.Affiliate => 10,
                 TypeUserEnum.Employee => 8,
@@ -95,24 +88,20 @@ namespace indigoLibrary.Application.Services
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-
             var date = initDate;
             int countedDays = 0;
-
 
             while (countedDays < workDays)
             {
                 if (date.DayOfWeek != DayOfWeek.Saturday &&
-                date.DayOfWeek != DayOfWeek.Sunday)
+                    date.DayOfWeek != DayOfWeek.Sunday)
                 {
                     countedDays++;
                 }
 
-
                 if (countedDays < workDays)
                     date = date.AddDays(1);
             }
-
 
             return date;
         }

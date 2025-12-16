@@ -20,12 +20,6 @@ namespace indigoLibrary.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateAsync(Book book)
-        {
-            await _context.Books.AddAsync(book);
-            await _context.SaveChangesAsync();
-        }
-
 
         public async Task UpdateAsync(Book book)
         {

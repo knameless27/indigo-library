@@ -16,10 +16,12 @@ namespace indigoLibrary.Infrastructure.DependencyInjection
             options.UseInMemoryDatabase("indigoLibraryDb"));
 
 
-            services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<LoanService>();
-            services.AddScoped<BookService>();
+            services.AddScoped<ILoanRepository, LoanRepository>();
+
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<ILoanService, LoanService>();
+
 
 
             return services;

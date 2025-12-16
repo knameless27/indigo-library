@@ -1,8 +1,6 @@
-using indigoLibrary.Application.DTOs;
 using indigoLibrary.Application.DTOs.requests;
-using indigoLibrary.Application.Services;
+using indigoLibrary.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace indigoLibrary.API.Controllers
 {
@@ -10,17 +8,16 @@ namespace indigoLibrary.API.Controllers
     [Route("api/[controller]")]
     public class LoanController : ControllerBase
     {
-        private readonly LoanService _loanService;
+        private readonly ILoanService _loanService;
 
-
-        public LoanController(LoanService loanService)
+        public LoanController(ILoanService loanService)
         {
             _loanService = loanService;
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> CreateLoan([FromBody] CreateLoanRequestDto request)
+        public async Task<IActionResult> CreateLoan(
+            [FromBody] CreateLoanRequestDto request)
         {
             try
             {
@@ -32,7 +29,6 @@ namespace indigoLibrary.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetLoan(Guid id)
