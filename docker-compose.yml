@@ -1,20 +1,18 @@
 version: "3.9"
 
 services:
-  front:
-    build:
-      context: front
-      dockerfile: Dockerfile
-    ports:
-      - "4173:4173"
-    environment:
-      - NODE_ENV=production
-    depends_on:
-      - api
-
   api:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile.front.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - api

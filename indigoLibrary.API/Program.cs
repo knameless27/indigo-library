@@ -9,28 +9,24 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-if (builder.Environment.IsDevelopment())
+const string MyCorsPolicy = "MyCorsPolicy";
+
+builder.Services.AddCors(options =>
 {
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("DevCors", policy =>
-            policy
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-        );
-    });
-}
+    options.AddPolicy(name: MyCorsPolicy,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://localhost")
+                                 .AllowAnyHeader()
+                                 .AllowAnyMethod();
+                      });
+});
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-if (app.Environment.IsDevelopment())
-{
-
-    app.UseCors("DevCors");
-}
+app.UseCors(MyCorsPolicy);
 
 app.UseHttpsRedirection();
 
